@@ -18,7 +18,7 @@ export function plotResultsN(r, posGroup, negGroup, n, map) {
     const topNMin = Math.min(...topN.map((r) => r.similarity));
     const topNMax = Math.max(...topN.map((r) => r.similarity));
 
-    // highlightPano(topN[0], map);
+    highlightPano(topN[0], map);
 
     // Folder URL where the images are stored, ensure it is accessible from the frontend
     const imageFolderUrl = "/public/imgs";
@@ -58,10 +58,10 @@ export function plotResultsN(r, posGroup, negGroup, n, map) {
             radius: rad_factor * normalizedSimilarity, // Radius based on normalized similarity
         }).addTo(posGroup);
 
-        // marker.on("click", highlightPano(this, map));
-        // marker.on("click", function (e) {
-        //     highlightPano(loc, map);
-        // });
+        marker.on("click", highlightPano(this, map));
+        marker.on("click", function (e) {
+            highlightPano(loc, map);
+        });
     });
 
     console.log("Top N:", topN, "Last N:", lastN, "Bounds:", {
@@ -75,6 +75,8 @@ export function plotResultsN(r, posGroup, negGroup, n, map) {
 function highlightPano(pano, map) {
     const seed = 2333;
     // Display the pano viewport
+
+    console.log(pano);
     try {
         const panoViewport = document.getElementById("panoViewport");
         panoViewport.style.display = "block";
@@ -82,10 +84,6 @@ function highlightPano(pano, map) {
         // Update the pano image
         const panoImg = document.getElementById("panoImg");
         panoImg.src = `./public/imgs/${pano.asciiname}_${pano.geonameid}_${seed}.png`;
-
-        // zoom to the pano
-        const panoLatLng = L.latLng(pano.location.Y, pano.location.X);
-        map.flyTo(panoLatLng, 16);
     } catch (error) {
         console.error("Error displaying pano:", error);
     }

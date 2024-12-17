@@ -26,6 +26,7 @@ export async function classifyLocations(textEmbeds, data) {
             location: { X: loc.longitude, Y: loc.latitude },
             id: loc.geonameid,
             similarity: cosineSim,
+            ...loc,
         });
     }
 
